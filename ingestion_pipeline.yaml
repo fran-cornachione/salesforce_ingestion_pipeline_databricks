@@ -1,0 +1,37 @@
+resources:
+  pipelines:
+    pipeline_my_salesforce_pipeline:
+      name: my_salesforce_pipeline
+      ingestion_definition:
+        connection_name: salesforce
+        objects:
+          - table:
+              source_schema: objects
+              source_table: Contact
+              destination_catalog: salesforce
+              destination_schema: bronze
+          - table:
+              source_schema: objects
+              source_table: Lead
+              destination_catalog: salesforce
+              destination_schema: bronze
+          - table:
+              source_schema: objects
+              source_table: Opportunity
+              destination_catalog: salesforce
+              destination_schema: bronze
+          - table:
+              source_schema: objects
+              source_table: Account
+              destination_catalog: salesforce
+              destination_schema: bronze
+        source_type: SALESFORCE
+      schema: bronze
+      development: false
+      channel: CURRENT
+      catalog: salesforce
+      notifications:
+        - email_recipients:
+            - your_name_here@gmail.com
+          alerts:
+            - on-update-fatal-failure
