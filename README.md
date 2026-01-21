@@ -12,7 +12,7 @@ The **Ingestion pipeline** extracts data from Salesforce into the bronze layer, 
 
 Orchestration is managed by **Lakeflow Declarative Pipelines**, which defines the ingestion and transformation steps as a unified **DAG (Directed Acyclic Graph)**. The job uses a dependency-based scheduling model, currently running daily, ensuring the ETL starts immediately upon successful Bronze loading.
 
-![img](Media\job_dag.png)
+![img](Media/job_dag.png)
 
 ### The main problem this project solves:
 
@@ -48,12 +48,12 @@ Now, we have to create the Ingestion Pipeline:
 
 Jobs & Pipelines → Ingestion Pipeline → Databricks Connectors → Salesforce
 
-![img](Media\databricks_connectors.png)
+![img](Media/databricks_connectors.png)
 
 - **Pipeline Name:** The name for the ingestion pipeline
 - **Event Log Location:** The event log contains audit logs, data quality checks, pipeline progress, and errors
 
-![img](Media\ingestion_setup.png)
+![img](Media/ingestion_setup.png)
 
 #### 4. Source
 
@@ -94,7 +94,7 @@ In my case, I scheduled the pipeline to run every day at 00:00 (daily). But more
 
 We can add multiple users to receive an email on pipeline **failure** or **success.**
 
-![img](Media\notifications.png)
+![img](Media/notifications.png)
 
 The ingestion pipeline can be also configured with YAML, the configuration is in the `ingestion_pipeline.yaml` file.
 
@@ -142,7 +142,7 @@ resources:
 
 When the pipeline is executed, we will see this:
 
-![img](Media\ingestion_pipeline.png)
+![img](Media/ingestion_pipeline.png)
 
 **4 Streaming tables were created** (one for each table in the ingestion stage).
 
@@ -160,7 +160,7 @@ The pipeline interface provides a real-time health check for every run:
 
 To transform the raw data, I built an ETL pipeline. The transformations are performed in the Silver layer by using CTAS (`CREATE TABLE AS SELECT`).
 
-![img](Media\Silver-Gold.png)
+![img](Media/Silver-Gold.png)
 
 The DAG (Directed Acyclic Graph) shows the lineage of each View and its dependecies. This is another strenght of the medallion architecture. Gold depends on silver, and silver depends on bronze.
 
