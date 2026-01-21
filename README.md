@@ -6,7 +6,7 @@ This projects aims to show the benefits of using a Lakehouse Architecture for pi
 
 The **Ingestion pipeline** extracts data from Salesforce into the bronze layer, then, an **ETL pipeline** processes and transforms that data in the silver layer, finally, bussiness logic is applied in the gold layer.
 
-![img](Media\Diagram.jpg)
+![img](Media/Diagram.jpg)
 
 ### Orchestration
 
