@@ -31,11 +31,25 @@ A unified Lakehouse is the best solution, everything is managed in one place: Co
 
 ## Setting up the Ingestion Pipeline | UI and Asset Bundles
 
-> Note: The pipelines and the job for this project can be setted up with UI or Asset Bundles. To deploy them with Asset Bundles, execute the following command ([Databricks-CLI](https://docs.databricks.com/aws/en/dev-tools/cli/install) must be installed.)
+### **Setup with Databricks Asset Bundles (DAB)**
 
-`cd salesforce`
+1. Install the [Databricks-CLI](https://docs.databricks.com/aws/en/dev-tools/cli/install).
+2. Install the [Databricks VSCode extension](https://marketplace.visualstudio.com/items?itemName=databricks.databricks) (not mandatory, but very useful).
+3. Copy this repo:
+   `git clone https://github.com/fran-cornachione/salesforce_ingestion_pipeline_databricks`
+4. Create an `.env` file and add the following varibles:
 
-`databricks bundle deploy` (--t dev is the default workspace so it will be deployed 
+```
+  EMAIL_RECIPIENTS = [Users on the workspace that will receive an alert whenever the pipeline fails]
+  CATALOG = [The catalog name for the project]
+  SCHEMA = [The name of the ingestion / bronze schema]
+  SILVER_SCHEMA = [The name of the silver schema]
+  WAREHOUSE_ID = [Your warehouse ID]
+```
+
+These variables are referenced in the project as `${env.VARIABLE_NAME}`
+
+## **Databricks Web UI Setup**
 
 #### 1. Connection
 
@@ -103,46 +117,6 @@ We can add multiple users to receive an email on pipeline **failure** or **succe
 ![img](Media/notifications.png)
 
 The ingestion pipeline can be also configured with YAML, the pipelines and the job are in the `salesforce/resources` folder as YAML files.
-
-```yaml
-resources:
-  pipelines:
-    pipeline_my_salesforce_pipeline:
-      name: my_salesforce_pipeline
-      ingestion_definition:
-        connection_name: salesforce
-        objects:
-          - table:
-              source_schema: objects
-              source_table: Contact
-              destination_catalog: salesforce
-              destination_schema: bronze
-          - table:
-              source_schema: objects
-              source_table: Lead
-              destination_catalog: salesforce
-              destination_schema: bronze
-          - table:
-              source_schema: objects
-              source_table: Opportunity
-              destination_catalog: salesforce
-              destination_schema: bronze
-          - table:
-              source_schema: objects
-              source_table: Account
-              destination_catalog: salesforce
-              destination_schema: bronze
-        source_type: SALESFORCE
-      schema: bronze
-      development: false
-      channel: CURRENT
-      catalog: salesforce
-      notifications:
-        - email_recipients:
-            - your_name_here@gmail.com
-          alerts:
-            - on-update-fatal-failure
-```
 
 ---
 
