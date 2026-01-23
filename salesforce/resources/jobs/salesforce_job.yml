@@ -1,17 +1,22 @@
 resources:
+
   jobs:
+
     salesforce_job:
       name: salesforce_job
       tasks:
+
         - task_key: salesforce_ingest
           pipeline_task:
             pipeline_id: d9dfdbdc-196c-47e0-b773-c091cee6d8b3
             full_refresh: false
+
         - task_key: etl_process
           depends_on:
             - task_key: salesforce_ingest
           pipeline_task:
             pipeline_id: 541063e8-e228-4f0d-bbd4-13589d300324
+            
       queue:
         enabled: true
       performance_target: PERFORMANCE_OPTIMIZED

@@ -1,0 +1,15 @@
+resources:
+  pipelines:
+    salesforce_etl:
+      name: salesforce_etl
+      libraries:
+        - glob:
+            include: /Workspace/Users/cornachofrance@gmail.com/salesforce_etl/transformations/**
+      schema: ${env.SILVER_SCHEMA}
+      continuous: false
+      development: false
+      photon: true
+      channel: CURRENT
+      catalog: ${env.CATALOG}
+      serverless: true
+      root_path: /Workspace/Users/cornachofrance@gmail.com/salesforce_etl

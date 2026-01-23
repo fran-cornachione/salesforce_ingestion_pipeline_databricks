@@ -8,30 +8,30 @@ resources:
           - table:
               source_schema: objects
               source_table: Contact
-              destination_catalog: salesforce
-              destination_schema: bronze
+              destination_catalog: ${env.CATALOG}
+              destination_schema: ${env.SCHEMA}
           - table:
               source_schema: objects
               source_table: Lead
-              destination_catalog: salesforce
-              destination_schema: bronze
+              destination_catalog: ${env.CATALOG}
+              destination_schema: ${env.SCHEMA}
           - table:
               source_schema: objects
               source_table: Opportunity
-              destination_catalog: salesforce
-              destination_schema: bronze
+              destination_catalog: ${env.CATALOG}
+              destination_schema: ${env.SCHEMA}
           - table:
               source_schema: objects
               source_table: Account
-              destination_catalog: salesforce
-              destination_schema: bronze
+              destination_catalog: ${env.CATALOG}
+              destination_schema: ${env.SCHEMA}
         source_type: SALESFORCE
-      schema: bronze
+      schema: ${env.SCHEMA}
       development: false
       channel: CURRENT
-      catalog: salesforce
+      catalog: ${env.CATALOG}
       notifications:
         - email_recipients:
-            - your_name_here@gmail.com
+            - ${env.EMAIL_RECIPIENTS}
           alerts:
             - on-update-fatal-failure
