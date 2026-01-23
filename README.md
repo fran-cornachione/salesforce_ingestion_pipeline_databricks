@@ -29,7 +29,13 @@ A unified Lakehouse is the best solution, everything is managed in one place: Co
 
 ---
 
-## Setting up the Ingestion Pipeline
+## Setting up the Ingestion Pipeline | UI and Asset Bundles
+
+> Note: The pipelines and the job for this project can be setted up with UI or Asset Bundles. To deploy them with Asset Bundles, execute the following command ([Databricks-CLI](https://docs.databricks.com/aws/en/dev-tools/cli/install) must be installed.)
+
+`cd salesforce`
+
+`databricks bundle deploy` (--t dev is the default workspace so it will be deployed 
 
 #### 1. Connection
 
@@ -96,7 +102,7 @@ We can add multiple users to receive an email on pipeline **failure** or **succe
 
 ![img](Media/notifications.png)
 
-The ingestion pipeline can be also configured with YAML, the configuration is in the `ingestion_pipeline.yaml` file.
+The ingestion pipeline can be also configured with YAML, the pipelines and the job are in the `salesforce/resources` folder as YAML files.
 
 ```yaml
 resources:
@@ -146,9 +152,9 @@ When the pipeline is executed, we will see this:
 
 **4 Streaming tables were created** (one for each table in the ingestion stage).
 
-Streaming tables updates only the new inserted records (`UPSERT`), if 100 leads were added yesterday, only 100 records will be processed, not the whole table.
+Streaming tables are updated **incrementally**, they only process the new inserted records (`UPSERT`). If 100 leads were added yesterday, only 100 records will be processed, not the entire table.
 
-The pipeline interface provides a real-time health check for every run:
+The pipeline interface (Lakeflow) provides a real-time health check for every run:
 
 * **Upserted (Green):** Only new or updated records from Salesforce are processed, ensuring efficient incremental loading.
 * **Deleted (Orange):** Reflects records removed from the source to keep the Lakehouse synchronized.
@@ -162,17 +168,17 @@ To transform the raw data, I built an ETL pipeline. The transformations are perf
 
 ![img](Media/Silver-Gold.png)
 
-The DAG (Directed Acyclic Graph) shows the lineage of each View and its dependecies. This is another strenght of the medallion architecture. Gold depends on silver, and silver depends on bronze.
+The DAG (Directed Acyclic Graph) shows the lineage of each View and its dependecies. This is another strenght of the medallion architecture. Gold depends on Silver, and Silver depends on Bronze.
 
 #### **Silver Layer: Data Cleansing & Standardization**
 
 In this stage, raw data from Bronze is refined and cleaned.
 
-- Selecting only necessaring columns: Some specific columns were not selected.
+- Selecting only necessaring columns: Some specific columns were not selected as they are not necessary for this stage.
 
 * Normalizing names: (e.g, john doe → John Doe)
 * Rounding numeric values: (e.g, 34.999999 → 34.99)
 
 #### Gold Layer: Bussiness Aggregations
 
-In the Gold layer, I transformed the cleaned Silver data into a **Star Schema** designed for high-performance analytics. The primary goal was to convert raw CRM records into meaningful business metrics and structured entities.
+In the Gold layer, I transformed the cleaned Silver data into a **Star Schema** designed for high-performance analytics / dashboards. The primary goal was to convert raw CRM records into meaningful business metrics and structured entities.
